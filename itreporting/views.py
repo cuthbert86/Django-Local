@@ -6,7 +6,8 @@ from django.views.generic import (ListView,
                                   DetailView,
                                   CreateView,
                                   UpdateView,
-                                  DeleteView)
+                                  DeleteView,
+                                  FormView)
 from django.urls import reverse_lazy
 from .models import Issue
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -15,7 +16,7 @@ from django.views.generic.edit import DeleteView
 from django.core.mail import send_mail
 from itapps import settings
 from users.models import User
-from forms import ContactForm
+from itreporting.forms import ContactForm
 
 
 def home(request):
@@ -148,8 +149,8 @@ class UserPostListView(ListView):
         return Issue.objects.filter(author=user).order_by('-date_submitted')
 
 
-class ContactFormView(FormView): 
-    form_class = ContactForm 
+class ContactFormView(FormView):
+    form_class = ContactForm
     template_name = 'itreporting/contact.html' 
 
     def get_context_data(self, **kwargs):
