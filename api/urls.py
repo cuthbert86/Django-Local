@@ -11,5 +11,5 @@ router.register('issues', IssueViewSet)
 
 urlpatterns = [ 
     path('', include(router.urls)),
-    path('auth', obtain_auth_token, name = 'api_token_auth'), 
+    path('auth', obtain_auth_token, name='api_token_auth'),
 ]

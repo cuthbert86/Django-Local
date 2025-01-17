@@ -1,6 +1,6 @@
 from . import views
 from users.views import profile, register
-from django.urls import path
+from django.urls import path, include
 from .views import (PostListView,
                     PostDetailView,
                     PostCreateView,
@@ -16,13 +16,6 @@ app_name = 'itreporting'
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('home', views.home, name='home'),
-    path('about', views.about, name='about'),
-    path('policies', views.policies, name='policies'),
-    path('regulations', views.regulations, name='regulations'),
-    path('contact', views.ContactFormView.as_view(
-        template_name='contact.html'), name = 'contact'),
-#    path('report/', views.report, name='report'),
     path('itreporting/issue_list', views.PostListView.as_view(
         template_name='issue_list.html'), name='issue_list'),
     path('itreporting/issue_detail', views.PostDetailView.as_view(

@@ -140,7 +140,7 @@ def send_mail1(request):
 
 class UserPostListView(ListView):
     model = Issue
-    template_name = 'itreporting/user_issues.html' 
+    template_name = 'itreporting/user_issues.html'
     context_object_name = 'issues'
     paginate_by = 5
 
@@ -151,21 +151,30 @@ class UserPostListView(ListView):
 
 class ContactFormView(FormView):
     form_class = ContactForm
-    template_name = 'itreporting/contact.html' 
+    template_name = 'itreporting/contact.html'
 
     def get_context_data(self, **kwargs):
         context = super(ContactFormView, self).get_context_data(**kwargs)
         context.update({'title': 'Contact Us'})
         return context
 
-    def form_valid(self, form): 
+    def form_valid(self, form):
         form.send_mail()
         messages.success(self.request, 'Successfully sent the enquiry') 
         return super().form_valid(form) 
 
-    def form_invalid(self, form): 
+    def form_invalid(self, form):
         messages.warning(self.request, 'Unable to send the enquiry') 
         return super().form_invalid(form) 
 
-    def get_success_url(self): 
-        return self.request.path 
+    def get_success_url(self):
+        return self.request.path
+
+
+def report(request):
+# Get all reported issues
+    issues = Issue.objects.all()
+# Create a context dictionary to pass to the template
+    context = {'issues': issues}
+# Render the report.html template with the context
+    return render(request, 'itreporting/report.html', context)

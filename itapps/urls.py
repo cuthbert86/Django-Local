@@ -17,23 +17,30 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
 from users import views as user_views
-from itreporting import views
+from itreporting import views, urls
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 # from management import views as student_views
-from users import views
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('itreporting/', include('itreporting.urls')),
-    path('register/', views.register, name='register'),
-    path('profile/', views.profile, name='profile'),
-    path('login/', auth_views.LoginView.as_view(
+    path('admin', admin.site.urls),
+    path('/', include('itreporting.urls')),
+    path('', views.home, name='home'),
+    path('about', views.about, name='about'),
+    path('policies', views.policies, name='policies'),
+    path('regulations', views.regulations, name='regulations'),
+    path('contact', views.ContactFormView.as_view(
+        template_name='contact.html'), name='contact'),
+    path('report', views.report, name='report'),
+#    path('/', include('itreporting.urls')),
+    path('users/register', user_views.register, name='users/register'),
+    path('profile', user_views.profile, name='users/profile'),
+    path('login', auth_views.LoginView.as_view(
         template_name='users/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(
+    path('logout', auth_views.LogoutView.as_view(
         template_name='users/logout.html'), name='logout'),
-    path('api/', include('api.urls')),
+    path('api', include('api.urls')),
 
 ]

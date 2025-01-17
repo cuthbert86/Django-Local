@@ -15,4 +15,4 @@ class IsAuthorOrReadOnly(BasePermission):
 
         # Write permissions are only allowed to the author of the issue. 
 
-        return issue.author == request.user 
+        return issue.author == request.user
