@@ -38,7 +38,7 @@ label="Toggle navigation">
 <!-- Navbar Right Side -->
 <div class="navbar-nav">
     {% if user.is_authenticated %}
-    <a class="nav-item nav-link" href="{% url 'itreporting:issue_create'%}">Report New Issue</a>
+    <a class="nav-item nav-link" href="{% url 'itreporting:create_issue'%}">Report New Issue</a>
     <form method="post" id="frm_logout" action="{% url 'logout'%}"
     style="display:inline;">
     {% csrf_token %}
@@ -69,7 +69,7 @@ inciderint per eu, ea vis scripta senserit periculis.
 <li class="list-group-item list-group-item-light"><a href ="{% url 'home' %}">Latest Issues Reported</a></li>
 <li class="list-group-item list-group-item-light"> <a href ="{% url 'policies' %}">IT Policies</a></li>
 <li class="list-group-item list-group-item-light"><a href="{% url 'regulations' %}">IT Regulations</a></li>
-<li class="list-group-item list-group-item-light"><a href="{% url 'home' %}">List of Modules</a></li>
+<li class="list-group-item list-group-item-light"><a href="{% url 'report' %}">List of Modules</a></li>
 <li class="list-group-item list-group-item-light"><a href="{% url 'home' %}">Send Email</a></li>
 <li class="list-group-item list-group-item-light"><a href="{% url 'home' %}">Click here to register for Modules</a></li>
 </ul>

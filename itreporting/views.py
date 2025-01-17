@@ -12,11 +12,11 @@ from django.urls import reverse_lazy
 from .models import Issue
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import DeleteView
-# import requests
+import requests
 from django.core.mail import send_mail
 from itapps import settings
 from users.models import User
-from itreporting.forms import ContactForm
+from itreporting.forms import ContactForm, IssueForm
 
 
 def home(request):
@@ -81,10 +81,11 @@ class PostDetailView(DetailView):
         return self.request.user(issue)
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView, FormView):
     model = Issue
     fields = ['type', 'room', 'urgent', 'details']
     success_url = 'home'
+    template_name = 'itreporting/create_issue.html'
 
     @login_required
     def form_valid(self, form):
@@ -96,16 +97,17 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Issue
     fields = ['type', 'room', 'details']
     success_url = 'home'
+    template_name = 'itreporting/create_issue.html'
 
     @login_required
     def test_func2(self):
         issue = self.get_object()
-        
         return self.request.user == issue.author
 
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Issue
+    form_class = IssueForm
     success_url = 'home'
 
     @login_required
