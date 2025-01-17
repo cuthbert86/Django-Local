@@ -7,10 +7,9 @@ from django.urls import reverse_lazy
 from .models import Issue
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import DeleteView
-import requests
+# import requests
 from django.core.mail import send_mail
 from itapps import settings
-
 
 
 def home(request):
@@ -99,7 +98,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     @login_required
     def test_func2(self):
         issue = self.get_object()
-        
+
         return self.request.user == issue.author
 
 

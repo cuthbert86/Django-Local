@@ -22,10 +22,13 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 # from management import views as student_views
+from users import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('itreporting/', include('itreporting.urls')),
+    path('register/', views.register, name='register'),
+    path('profile/', views.profile, name='profile'),
 
 ]
