@@ -55,20 +55,13 @@ def policies(request):
 
 class PostListView(ListView):
     model = Issue
-    ordering = ['-date_submitted']
-    template_name = 'itreporting/report.html'
-    context_object_name = 'issues'
+    fields = ['self', 'author', 'date_submitted', 'urgent']
+    template_name = 'itreporting/issue_list.html'
+    issue = 'issues'
     paginate_by = 5  # Optional pagination
 
-
-@login_required
-def report(request):
-# Get all reported issues
-    issues = Issue.objects.all()
-# Create a context dictionary to pass to the template
-    context = {'issues': issues}
-# Render the report.html template with the context
-    return render(request, 'itreporting/report.html', context)
+    def get_issue(self):
+        return Issue.objects.all()
 
 
 class PostDetailView(DetailView):
@@ -84,6 +77,7 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Issue
     fields = ['type', 'room', 'urgent', 'details']
+    success_url = 'home'
 
     @login_required
     def form_valid(self, form):
@@ -94,17 +88,18 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Issue
     fields = ['type', 'room', 'details']
+    success_url = 'home'
 
     @login_required
     def test_func2(self):
         issue = self.get_object()
-
+        
         return self.request.user == issue.author
 
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Issue
-    success_url = '/report'
+    success_url = 'home'
 
     @login_required
     def test_func3(self):
