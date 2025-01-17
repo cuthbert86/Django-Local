@@ -9,11 +9,11 @@
         <article class="media content-section">
             <div class="media-body">
                 <div class="article-metadata">
-                    <a class="mr-2" href="#">{{ issue.author.profile }}</a>
+                    <a class="mr-2" href="{% url 'itreporting:user_issues' issue.author.username %}">{{ object.author }}</a>
                     <small class="text-muted">{{ issue.date_submitted }}</small>
                 </div>
-                <h2><a class="article-title" href="{% url 'itreporting:issue-detail' issue.id %}">{{ issue }}</a></h2>
-                <p class="article-content">{{ issue.details }}</p>
+                <h2 class="article-title">{{ object.type    }} Issue in Room {{object.room}}</h2>
+                <p class="article-content">{{ object.details }}</p>
             </div>
         </article>
 

@@ -4,7 +4,7 @@
     <title>Issues Reported</title>
 </head>
 <body>
-    <h1>Issues Reported</h1>
+    <h1 class="mb-3"> Issues Reported by {{ view.kwargs.username }} {% if is_paginated %} (page {{page_obj.number}} of {{page_obj.paginator.num_pages}}){% endif %}</h1>
     {% for issue in issues %}
         <article class="media content-section">
             <div class="media-body">
