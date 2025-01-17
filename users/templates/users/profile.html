@@ -1,0 +1,32 @@
+{% extends "itreporting/base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+<div class="content-section">
+    <div class="media">
+        <p>
+            {% if user.profile.image %}
+            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+            {% else %}
+            <img class="rounded-circle account-img" src="/media/profile_pics/default.jpeg">
+            {% endif %}
+            </p>
+    <div class="media-body">
+    <h2 class="account-heading">{{ user.profile }}</h2>
+    <p class="text-secondary">{{ user.username }}</p>
+    <p class="text-secondary">{{ user.email }}</p>
+    </div>
+    </div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Student IT Services - Profile
+        Details</legend>
+        {{ u_form | crispy }}
+        {{ p_form | crispy }}
+        </fieldset>
+        <div class="form-group">
+        <button class="btn btn-outline-info" type="submit">Update</button>
+        </div>
+    </form>
+    </div>
+{% endblock content %}

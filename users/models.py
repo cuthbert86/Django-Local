@@ -3,7 +3,7 @@ from django.db import models
 from datetime import datetime
 # from management.models import Module
 from django.conf import settings
-# from django.db.models import Model
+from django.db.models import Model
 from django.contrib import admin
 
 

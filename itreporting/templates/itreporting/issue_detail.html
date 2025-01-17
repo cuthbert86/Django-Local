@@ -1,0 +1,22 @@
+{% extends "itreporting/base.html" %}
+{% block content %}
+<h1>Issues Reported</h1>
+{% if issues %}
+{% for issue in issues %}
+<article class="media content-section">
+<img class="rounded-circle article-img"
+src="{{ issue.author.profile.image.url }}"/>
+<div class="media-body">
+<div class="article-metadata">
+<a class="mr-2" href="#">{{ issue.author.profile }}</a>
+<small class="text-muted">{{ issue.date_submitted }}</small>
+</div>
+<h2><a class="article-title" href="{% url 'itreporting:issue-detail' issue.id %}">{{ issue }}</a></h2>
+<p class="article-content">{{ issue.details }}</p>
+</div>
+</article>
+{% endfor %}
+{% else %}
+<p>No issues reported.</p>
+{% endif %}
+{% endblock %}
