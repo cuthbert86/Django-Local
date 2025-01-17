@@ -20,7 +20,8 @@ urlpatterns = [
     path('about', views.about, name='about'),
     path('policies', views.policies, name='policies'),
     path('regulations', views.regulations, name='regulations'),
-    path('contact', views.contact, name='contact'),
+    path('contact', views.ContactFormView.as_view(
+        template_name='contact.html'), name = 'contact'),
 #    path('report/', views.report, name='report'),
     path('itreporting/issue_list', views.PostListView.as_view(
         template_name='issue_list.html'), name='issue_list'),

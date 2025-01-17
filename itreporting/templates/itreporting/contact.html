@@ -1,42 +1,28 @@
 {% extends "itreporting/base.html" %}
+
+{% load crispy_forms_tag %}
+
 {% block content %}
-<form action = "" method = "POST">
-    {% csrf_token %} 
-    <body class="m-3">
-    <br></br>>
-        <div class="container text-center ">
-            <h1 class="text-success">Get In Contact!</h1>
-            <h5>We love getting student feedback so get in touch with us via this
-                form whenever you feel like it.  
-            </h5>
-        </div>
-        <form class="p-3 mt-4 col gy-4 gx-4 align-items-center border bg-light">
-            <div class="col-auto">
-                <label for="name">Your name: </label>
-                    <input id="name" type="text" name="name">
-            </div>
-                 <div class="col-auto mt-3">
-                     <div class="input-group">
-                        <label for="email">Your Email: </label>
-                        <input id="email" type="text" name="email">
-                    </div>
-                 </div>
-            <div class="col-auto mt-3">
-                <div class="input-group">
-                    <label for="Subject">Subject: </label>
-                        <input id="subject" type="text" name="subject">  
-                </div>
-            </div>
-            <div class="col-auto mt-3">
-                <div class="input-group">
-                    <label for="message">Your Message For Us: </label>
-                        <input id="message" type="text" name="message">
-                        <input type="submit" value="OK">
-                </div>
-            </div>
+
+<div class="content-section"> 
+ 
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+
+            <legend class="borer-bottom mb-4"> Report IT Issue </legend>
+            {{ form|crispy }}
+
+        </fieldset>
+        <div class="form-group">
+
+            <button class="btn btn-outline-info"  type="submit">Submit</button>
+        </div> 
+
+    </form>
+    <div class="border-top pt-3">
+        <small class="text-muted">Are you already Registered? <a class="ml-2" href="#">Login </a></small>
         
-        </form>
-</form>
-{% endblock %}
-</body>
-</html>
+    </div> 
+
+{% endblock content %}
