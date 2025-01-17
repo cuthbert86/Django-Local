@@ -10,7 +10,7 @@ from django.contrib import admin
 class Profile(models.Model):
     user = models.OneToOneField(
         User, primary_key=True, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=10), default=''
+    first_name = models.CharField(max_length=10, default='')
     last_name = models.CharField(max_length=10, default='')
     StudentOrStaff = models.CharField(max_length=100, choices=[
         ('Student', 'Student'), ('Staff', 'Staff')], default='Student')
