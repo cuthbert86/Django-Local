@@ -8,7 +8,7 @@ from .views import CreateCourseView, CourseListView
 
 
 urlpatterns = [
-    path('management/welcome', welcome, name='management/welcome'),
+    path('management/welcome', welcome, name='welcome'),
     path('management/module_list', ModuleListView.as_view(
         template_name='module_list.html'), name='module_list'),
     path('management/module_details', ModuleDetailView.as_view(

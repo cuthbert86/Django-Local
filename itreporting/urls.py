@@ -31,6 +31,6 @@ urlpatterns = [
         template_name='user_issues.html'), name='user_issues'),
     path('itreporting/issue_create', IssueCreateView.as_view(
         template_name='issue_create.html'), name='issue_create'),
-    path('itreporting/contact', ContactCreateView.as_view(
-        template_name='itreporting/contact.html'), name='contact'),
+    path('itreporting/contact_create', ContactCreateView.as_view(
+        template_name='itreporting/contact_create.html'), name='contact'),
 ]

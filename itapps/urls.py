@@ -23,6 +23,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from management import views as student_views
 from itreporting.views import send_mail
+from newsapp import views as news_views
 
 
 urlpatterns = [
@@ -36,11 +37,11 @@ urlpatterns = [
         template_name='contact.html'), name='contact'),
     path('report', views.report, name='report'),
 #    path('/', include('itreporting.urls')),
-    path('users/register', user_views.register, name='users/register'),
-    path('profile', user_views.profile, name='users/profile'),
-    path('login', auth_views.LoginView.as_view(
+    path('users/register', user_views.register, name='register'),
+    path('users/profile', user_views.profile, name='profile'),
+    path('users/login', auth_views.LoginView.as_view(
         template_name='users/login.html'), name='login'),
-    path('logout', auth_views.LogoutView.as_view(
+    path('users/logout', auth_views.LogoutView.as_view(
         template_name='users/logout.html'), name='logout'),
     path('api', include('api.urls')),
     path('management/', include('management.urls')),
@@ -53,6 +54,7 @@ urlpatterns = [
     path("reset/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.
          as_view(extra_context={"site_header": admin.site.site_header}),
          name="password_reset_complete"),
+    path('newsapp/index', news_views.index, name='index'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,28 @@
+{% extends "itreporting/base.html" %}
+{% block content %}
+
+  <body> 
+    <div class="jumbotron" style="color:black"> 
+  
+      <h1 style ="color:white"> 
+   Get The latest news on our website 
+      </h1> 
+  
+    </div> 
+  
+  
+    <div class="container"> 
+      {% for new, des, i in mylist %} 
+              <img src="{{ i }}" alt=""> 
+              <h1>news:</h1> {{ new }} 
+              {{ value|linebreaks }} 
+  
+              <h4>description:</h4>{{ des }} 
+              {{ value|linebreaks }} 
+  
+      {% endfor %} 
+    </div> 
+  
+  </body> 
+
+  {% endblock content %}

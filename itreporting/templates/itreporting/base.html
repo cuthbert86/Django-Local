@@ -24,8 +24,7 @@ crossorigin="anonymous">
 <div class="container">
 <a class="navbar-brand mr-4" href="{% url 'home' %}">Student IT Services</a>
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
-aria-controls="navbarToggle" aria-expanded="false" aria-
-label="Toggle navigation">
+aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
 <span class="navbar-toggler-icon"></span>
 </button>
 <div class="collapse navbar-collapse" id="navbarToggle">
@@ -47,8 +46,8 @@ label="Toggle navigation">
     </form>
     {% else %}
     <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-    <a class="nav-item nav-link" href="{% url 'users/register' %}">Register</a>
-    <a class="nav-item nav-link" href="{% url 'users/profile' %}">Update Profile</a>
+    <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+    <a class="nav-item nav-link" href="{% url 'profile' %}">Update Profile</a>
     {% endif %}
     </div>
 </div>
@@ -66,12 +65,14 @@ label="Toggle navigation">
 <p class='text-muted'>Lorem ipsum dolor sit amet, iudico docendi
 inciderint per eu, ea vis scripta senserit periculis.
 <ul class="list-group">
-<li class="list-group-item list-group-item-light"><a href ="{% url 'home' %}">Latest Issues Reported</a></li>
+<li class="list-group-item list-group-item-light"><a href ="{% url 'report' %}">Latest Issues Reported</a></li>
+<li class="list-group-item list-group-item-light"><a href ="{% url 'itreporting:user_issues' %}">Your Issues Reported</a></li>
 <li class="list-group-item list-group-item-light"> <a href ="{% url 'policies' %}">IT Policies</a></li>
 <li class="list-group-item list-group-item-light"><a href="{% url 'regulations' %}">IT Regulations</a></li>
-<li class="list-group-item list-group-item-light"><a href="{% url 'report' %}">List of Modules</a></li>
-<li class="list-group-item list-group-item-light"><a href="{% url 'home' %}">Send Email</a></li>
-<li class="list-group-item list-group-item-light"><a href="{% url 'home' %}">Click here to register for Modules</a></li>
+<li class="list-group-item list-group-item-light"><a href="{% url 'index' %}">Keep up to date about the lastest News Here</a></li>
+<li class="list-group-item list-group-item-light"><a href="{% url 'management:module_list' %}">List of Modules</a></li>
+<li class="list-group-item list-group-item-light"><a href="{% url 'mangement:course_list' %}">List of Courses</a></li>
+<li class="list-group-item list-group-item-light"><a href="{% url 'management:registration_form' %}">Click here to register for Modules</a></li>
 </ul>
 </p>
 </div>

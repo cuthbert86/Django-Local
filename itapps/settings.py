@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'api',
     'rest_framework.authtoken',
     'management',
+    'newsapp',
 ]
 
 MIDDLEWARE = [
@@ -138,11 +139,11 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'itreporting:home'
 
-REST_FRAMEWORK = { 
+REST_FRAMEWORK = {
 
-    'DEFAULT_AUTHENTICATION_CLASSES': [ 
+    'DEFAULT_AUTHENTICATION_CLASSES': [
 
-        'rest_framework.authentication.TokenAuthentication', 
+        'rest_framework.authentication.TokenAuthentication',
 
     ],
 

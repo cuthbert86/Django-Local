@@ -55,11 +55,18 @@ def contact(request):
 
 
 def regulations(request):
-    return render(request, 'itreporting/regulations.html', {'title': 'IT Regulations'})
+    return render(request, 'itreporting/regulations.html', 
+                  {'title': 'IT Regulations'})
 
 
 def policies(request):
-    return render(request, 'itreporting/policies.html', {'title': 'IT Policies'})
+    return render(request, 'itreporting/policies.html',
+                  {'title': 'IT Policies'})
+
+
+def successs(request):
+    return render(request, 'itreporting/success.html',
+                  {'title': 'Submission Successful!'})
 
 
 class IssueListView(ListView):
@@ -88,6 +95,11 @@ class IssueCreateView(LoginRequiredMixin, CreateView):
     fields = ['type', 'room', 'urgent', 'details']
     success_url = 'home'
     template_name = 'issue_create.html'
+
+    @login_required
+    def test_func2(self):
+        issue = self.get_object()
+        return self.request.user == issue.author
 
     @login_required
     def form_valid(self, form):
@@ -120,7 +132,7 @@ class IssueUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class IssueDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Issue
-#    form_class = IssueForm
+#   form_class = IssueForm
     success_url = 'home'
 
     @login_required
@@ -178,7 +190,7 @@ class ContactCreateView(LoginRequiredMixin, CreateView):
             else:
                 context['result'] = 'All fields are required'
 
-        return render(request, "email.html", context)
+        return render(request, "contact_create.html", context)
 
 
 @login_required
@@ -186,3 +198,5 @@ def report(request):
     issues = Issue.objects.all()
     context = {'issues': issues}
     return render(request, 'itreporting/report.html', context)
+
+
