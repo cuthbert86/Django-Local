@@ -31,7 +31,7 @@ urlpatterns = [
     path('about', views.about, name='about'),
     path('policies', views.policies, name='policies'),
     path('regulations', views.regulations, name='regulations'),
-    path('contact', views.ContactFormView.as_view(
+    path('contact', views.ContactCreateView.as_view(
         template_name='contact.html'), name='contact'),
     path('report', views.report, name='report'),
 #    path('/', include('itreporting.urls')),
@@ -44,3 +44,5 @@ urlpatterns = [
     path('api', include('api.urls')),
 
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

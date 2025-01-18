@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
@@ -9,14 +9,16 @@ from django.views.generic import (ListView,
                                   DeleteView,
                                   FormView)
 from django.urls import reverse_lazy
-from .models import Issue
+from .models import Issue, ContactSubmission
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 import requests
 from django.core.mail import send_mail
 from itapps import settings
-from users.models import User
+from users.models import Profile
 from itreporting.forms import ContactForm, IssueForm
+from django.contrib import messages
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -60,7 +62,7 @@ def policies(request):
     return render(request, 'itreporting/policies.html', {'title': 'IT Policies'})
 
 
-class PostListView(ListView):
+class IssueListView(ListView):
     model = Issue
     fields = ['self', 'author', 'date_submitted', 'urgent']
     template_name = 'itreporting/issue_list.html'
@@ -71,7 +73,7 @@ class PostListView(ListView):
         return Issue.objects.all()
 
 
-class PostDetailView(DetailView):
+class IssueDetailView(DetailView):
     model = Issue
     fields = ['type', 'room', 'urgent', 'details']
 
@@ -81,11 +83,11 @@ class PostDetailView(DetailView):
         return self.request.user(issue)
 
 
-class PostCreateView(LoginRequiredMixin, CreateView, FormView):
+class IssueCreateView(LoginRequiredMixin, CreateView):
     model = Issue
     fields = ['type', 'room', 'urgent', 'details']
     success_url = 'home'
-    template_name = 'itreporting/create_issue.html'
+    template_name = 'issue_create.html'
 
     @login_required
     def form_valid(self, form):
@@ -93,11 +95,22 @@ class PostCreateView(LoginRequiredMixin, CreateView, FormView):
         return super().form_valid(form)
 
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class PostCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Issue
+    fields = ['type', 'room', 'urgent', 'details']
+    success_url = 'home'
+
+    @login_required
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class IssueUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Issue
     fields = ['type', 'room', 'details']
     success_url = 'home'
-    template_name = 'itreporting/create_issue.html'
+    template_name = 'itreporting/issue_create.html'
 
     @login_required
     def test_func2(self):
@@ -105,9 +118,9 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user == issue.author
 
 
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class IssueDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Issue
-    form_class = IssueForm
+#    form_class = IssueForm
     success_url = 'home'
 
     @login_required
@@ -116,67 +129,60 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user == issue.author
 
 
-"""
-@login_required
-def send_mail1(request):
-    context = {}
-
-    if request.method == 'POST':
-        address = request.POST.get('address')
-        subject = request.POST.get('subject')
-        message = request.POST.get('message')
-
-        if address and subject and message:
-            try:
-                send_mail1(subject, message, settings.EMAIL_HOST_USER,
-                           [address])
-                context['result'] = 'Email sent successfully'
-            except Exception as e:
-                context['result'] = f'Error sending email: {e}'
-        else:
-            context['result'] = 'All fields are required'
-
-    return render(request, "email.html", context)
-"""
-
-
-class UserPostListView(ListView):
+class UserIssueListView(ListView):
     model = Issue
     template_name = 'itreporting/user_issues.html'
     context_object_name = 'issues'
     paginate_by = 5
 
+    @login_required
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         return Issue.objects.filter(author=user).order_by('-date_submitted')
 
 
-class ContactFormView(FormView):
-    form_class = ContactForm
-    template_name = 'itreporting/contact.html'
+class ContactCreateView(LoginRequiredMixin, CreateView):
+    model = ContactSubmission
+    fields = ['name', 'email', 'subject', 'message']
+    success_url = 'home'
+    template_name = 'contact.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(ContactFormView, self).get_context_data(**kwargs)
-        context.update({'title': 'Contact Us'})
-        return context
-
+    @login_required
     def form_valid(self, form):
-        form.send_mail()
-        messages.success(self.request, 'Successfully sent the enquiry') 
-        return super().form_valid(form) 
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.warning(self.request, 'Unable to send the enquiry') 
-        return super().form_invalid(form) 
+        return super().form_invalid(form)
 
     def get_success_url(self):
         return self.request.path
 
+    @login_required
+    def send_mail(request):
+        context = {}
 
+        if request.method == 'POST':
+            address = request.POST.get('address')
+            subject = request.POST.get('subject')
+            message = request.POST.get('message')
+
+            if address and subject and message:
+                try:
+                    send_mail(subject, message, settings.EMAIL_HOST_USER,
+                              [address])
+                    context['result'] = 'Email sent successfully'
+                except Exception as e:
+                    context['result'] = f'Error sending email: {e}'
+            else:
+                context['result'] = 'All fields are required'
+
+        return render(request, "email.html", context)
+
+
+@login_required
 def report(request):
-# Get all reported issues
     issues = Issue.objects.all()
-# Create a context dictionary to pass to the template
     context = {'issues': issues}
-# Render the report.html template with the context
     return render(request, 'itreporting/report.html', context)

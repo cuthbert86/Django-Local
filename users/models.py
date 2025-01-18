@@ -3,13 +3,12 @@ from django.db import models
 from datetime import datetime
 # from management.models import Module
 from django.conf import settings
-from django.db.models import Model
 from django.contrib import admin
 
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        User, primary_key=True, on_delete=models.CASCADE)
+        to=User, primary_key=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=10, default='')
     last_name = models.CharField(max_length=10, default='')
     StudentOrStaff = models.CharField(max_length=100, choices=[
@@ -24,4 +23,4 @@ class Profile(models.Model):
 #                                        on_delete=models.PROTECT)
 
     def __str__(self):
-        return f'{self.user.first_name} + {self.user.last_name}'
+        return f'{self.user.username}'

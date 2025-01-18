@@ -1,11 +1,7 @@
 from django import forms
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from users.models import Profile
 from .models import Issue, ContactSubmission
-from django.shortcuts import render
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Submit
@@ -30,10 +26,14 @@ class ContactForm(forms.ModelForm):
 
 @login_required
 class IssueForm(forms.ModelForm):
+
     class Meta:
         Model = Issue
         fields = ['type', 'room', 'urgent', 'details']
 
+
+
+"""
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
@@ -46,3 +46,4 @@ class IssueForm(forms.ModelForm):
                     ),
                 Submit('submit', 'Submit', css_class='button white'),
                 )
+"""

@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from datetime import datetime
+from django.conf import settings
 
 
 Type = [('Hardware', 'Hardware'),
@@ -18,7 +19,7 @@ class Issue(models.Model):
     details = models.TextField(max_length=200)
     date_submitted = models.DateTimeField(default=datetime.now)
     author = models.ForeignKey(
-        User, related_name='issues', on_delete=models.CASCADE)
+        User, related_name='user', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.type} Issue in {self.room}'
