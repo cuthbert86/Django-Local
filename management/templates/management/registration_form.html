@@ -1,0 +1,17 @@
+{% extends "itreporting/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <title>Register for Module</title>
+</head>
+<body>
+    <h2>Register for a Module</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Render the form fields -->
+        <button type="submit">Register</button>
+    </form>
+    {% endblock content %}
+</body>
+
+</html>

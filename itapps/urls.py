@@ -21,7 +21,8 @@ from itreporting import views, urls
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
-# from management import views as student_views
+from management import views as student_views
+from itreporting.views import send_mail
 
 
 urlpatterns = [
@@ -42,7 +43,16 @@ urlpatterns = [
     path('logout', auth_views.LogoutView.as_view(
         template_name='users/logout.html'), name='logout'),
     path('api', include('api.urls')),
-
+    path('management/', include('management.urls')),
+    path("admin/password_reset/", auth_views.PasswordResetView.
+         as_view(extra_context={"site_header": admin.site.site_header}),
+         name="admin_password_reset",),
+    path("admin/password_reset/done/", auth_views.PasswordResetDoneView.
+         as_view(extra_context={"site_header": admin.site.site_header}),
+         name="password_reset_done",),
+    path("reset/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.
+         as_view(extra_context={"site_header": admin.site.site_header}),
+         name="password_reset_complete"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

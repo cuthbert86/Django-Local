@@ -1,0 +1,37 @@
+{% extends "itreporting/base.html" %}
+{% block content %}
+  <h1>Module Details</h1>
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <td>Name</td>
+        <td>{{ Module.name }}</td>
+      </tr>>
+      <tr>
+        <td>Code</td>
+        <td>{{ Module.Course_code }}</td>
+      </tr>
+      <tr>
+        <td>Credits</td>
+        <td>{{ Module.credits }}</td>
+      </tr>>
+      <tr>
+        <td>Category</td>
+        <td>{{ Module.category }}</td>
+      </tr>>
+      <tr>
+        <td>Description</td>
+        <td>{{ Module.description }}</td>
+      </tr>>
+      <tr>
+        <td>Availability</td>
+        <td>{{ Module.available }}</td>
+      </tr>
+      <tr>
+        <td>Course</td>     
+        <td>{{% Module.Course %}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <a href="{% Module.student %}" class="btn btn-secondary">Register for this Module</a>
+{% endblock content %}
