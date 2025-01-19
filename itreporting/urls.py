@@ -3,7 +3,7 @@ from users.views import profile, register
 from django.urls import path, include
 from .views import IssueListView, IssueDetailView, IssueCreateView
 from .views import IssueUpdateView, IssueDeleteView, UserIssueListView
-from .views import ContactCreateView
+from .views import ContactCreateView, success_view
 from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
@@ -27,10 +27,11 @@ urlpatterns = [
     path('itreporting/issue_delete', IssueDeleteView.as_view(
         template_name='itreporting/issue_delete.html'), name='issue_delete'),
 #    path('itreporting/send_mail1', views.send_mail1, name='email'),
-    path('itreporting/issue/<str:username>', UserIssueListView.as_view(
+    path('itreporting/user_issues/<str:username>', UserIssueListView.as_view(
         template_name='user_issues.html'), name='user_issues'),
     path('itreporting/issue_create', IssueCreateView.as_view(
         template_name='issue_create.html'), name='issue_create'),
     path('itreporting/contact_create', ContactCreateView.as_view(
         template_name='itreporting/contact_create.html'), name='contact'),
+    path('itreporting/success', success_view, name='usccess'),
 ]

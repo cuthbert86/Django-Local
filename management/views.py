@@ -13,10 +13,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import DeleteView
 from .models import Module, Registration, Course
 from django.http import HttpResponse
-from .forms import RegistrationForm
+from .forms import RegistrationForm, ModuleForm, CourseForm
 from django.contrib.auth.models import User
 from itapps import settings
 from django.urls import reverse_lazy
+from .models import Module, Registration, Course
 
 
 @login_required
@@ -42,11 +43,11 @@ def welcome(request):
 class CourseListView(ListView):
     model = Course
     courses = Course.objects.all()
-    
+
     @login_required
     def course_list(request, courses):
         context = {'Courses': courses}
-        return render('management/module_list.html', context)
+        return render('management/course_list.html', context)
 
 
 class ModuleListView(ListView):
@@ -62,7 +63,7 @@ class ModuleListView(ListView):
 class ModuleDetailView(DetailView):
     model = Module
     fields = ['Name', 'Course_Code', 'credits', 'Category', 'Description',
-              'Course', 'available']
+              'available']
 
     @login_required
     def Module_detail(request, Module):
@@ -75,7 +76,7 @@ class ModuleDetailView(DetailView):
             Module.credits = request.POST.get('credits')
             Module.Category = request.POST.get('Category')
             Module.Description = request.POST.get('Description')
-            Module.Course = request.POST.get('Course')
+#            Module.Course = request.POST.get('Course')
             Module.availabile = request.POST.get('availability')
         return render(request, "management/module_details", context)
 
@@ -100,7 +101,7 @@ class CreateModuleView(CreateView):
     model = Module
     fields = ['Name', 'Course_Code', 'credits', 'Category', 'Description',
               'Course', 'available']
-    success_url = success_view
+    success_url = 'management/success'
 
     @login_required
     def form_valid(self, form):
@@ -130,5 +131,24 @@ class RegistrationFormView(LoginRequiredMixin, FormView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-# class StaffProfileView(LoginRequiredMixin, FormViews):
-#    model 
+
+@login_required
+def module_form(request):
+    context = {}
+    form = ModuleForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+
+    context['module_form'] = form
+    return render(request, "module_form.html", context)
+
+
+@login_required
+def course_form(request):
+    context = {}
+    form = CourseForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+
+    context['course_form'] = form
+    return render(request, "success.html", context)

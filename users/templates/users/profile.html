@@ -27,5 +27,7 @@
         <button class="btn btn-outline-info" type="submit">Update</button>
         </div>
     </form>
-    </div>
-{% endblock content %}
+    <ul class="list-group">
+    <li class="list-group-item list-group-item-light"><a href ="{% url 'user_issues' %}">Your Issues Reported</a></li>
+    </ul>
+    {% endblock content %}

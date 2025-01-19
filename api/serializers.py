@@ -1,14 +1,12 @@
-from rest_framework.serializers import ModelSerializer , ReadOnlyField 
-from itreporting.models import Issue 
+from rest_framework.serializers import ModelSerializer, ReadOnlyField
+from itreporting.models import Issue
 
 
-class IssueSerializer(ModelSerializer): 
+class IssueSerializer(ModelSerializer):
 
-    author = ReadOnlyField(source = 'author.username') 
+    author = ReadOnlyField(source='author.username') 
 
     class Meta:
-
-        model = Issue 
-
+        model = Issue
         fields = [
             'type', 'room', 'urgent', 'details', 'date_submitted', 'author']

@@ -200,3 +200,5 @@ def report(request):
     return render(request, 'itreporting/report.html', context)
 
 
+def success_view(request):
+    return render(request, 'success.html')
