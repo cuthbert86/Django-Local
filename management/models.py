@@ -7,6 +7,8 @@ from django.core.validators import MaxValueValidator
 from django.conf import settings
 from rest_framework import serializers
 from django.urls import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 Category = [("compulsary", "compulsary"),
@@ -22,22 +24,30 @@ class Module(models.Model):
     credits = models.IntegerField(default=0)
     category = models.CharField(choices=Category, max_length=10)
     Description = models.TextField(max_length=200, default='')
-#   course = models.ForeignKey(on_delete=models.PROTECT, null=True, blank=True)
+#    course_name = models.ForeignKey(Course, on_delete=models.PROTECT)
     avalaible = models.CharField(choices=available, max_length=10)
 
     def __str__(self):
-        return f'{self.name} Module in {self.Course}'
-
-    def get_absolute_url(self):
-        return reverse('management/module_details', kwargs={'pk': self.pk})
+        return f'{self.name}'
+    
+#    def get_absolute_url(self):
+#        return reverse('management/module_details', kwargs={'pk': self.pk})
 
 
 class Course(models.Model):
-    name = models.CharField(primary_key=True, max_length=40)
+    name = models.CharField(
+        primary_key=True, max_length=10)
+
+    def __str__(self):
+        return f'{self.name}'
+
+
+class ModuleCourse(models.Model):
+    course_name = models.ForeignKey(to=Course, on_delete=models.CASCADE)
     module = models.ForeignKey(to=Module, on_delete=models.PROTECT)
 
-    def __str__(self) -> str:
-        return self.name
+    def __str__(self):
+        return f'{self.course_name} - {self.module.name}'
 
 
 class Registration(models.Model):

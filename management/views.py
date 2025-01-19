@@ -104,6 +104,16 @@ class CreateModuleView(CreateView):
     success_url = 'management/success'
 
     @login_required
+    def module_form(request):
+        context = {}
+        form = ModuleForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+
+        context['module_form'] = form
+        return render(request, "module_form.html", context)
+
+    @login_required
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -114,10 +124,20 @@ class CreateCourseView(LoginRequiredMixin, CreateView):
     fields = ['name', 'module']
     template_name = 'management/create_course.html'
     success_url = 'management/course_list'
-    
+
+    @login_required
+    def course_form(request):
+        context = {}
+        form = CourseForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+
+        context['course_form'] = form
+        return render(request, "success.html", context)
+
     @login_required
     def form_valid(self, form):
-        form.instance.user = self.request.user  #
+        form.instance.user = self.request.user  
         return super().form_valid(form)
 
 
