@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ModelForm
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from .models import Issue, ContactSubmission
@@ -24,16 +25,14 @@ class ContactForm(forms.ModelForm):
                   ['bainescuthbert@gmail.com'])
 
 
-@login_required
+
 class IssueForm(forms.ModelForm):
 
     class Meta:
         Model = Issue
         fields = ['type', 'room', 'urgent', 'details']
 
-
-
-"""
+        @login_required
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             self.helper = FormHelper()
@@ -42,8 +41,7 @@ class IssueForm(forms.ModelForm):
                     'type',
                     'room',
                     'urgent',
-                    'detai;s',
+                    'details',
                     ),
                 Submit('submit', 'Submit', css_class='button white'),
                 )
-"""

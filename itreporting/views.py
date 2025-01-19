@@ -2,12 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from django.views.generic import (ListView,
-                                  DetailView,
-                                  CreateView,
-                                  UpdateView,
-                                  DeleteView,
-                                  FormView)
+from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.urls import reverse_lazy
 from .models import Issue, ContactSubmission
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -132,7 +127,7 @@ class IssueUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class IssueDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Issue
-#   form_class = IssueForm
+    form_class = IssueForm
     success_url = 'home'
 
     @login_required
@@ -156,7 +151,7 @@ class UserIssueListView(ListView):
 class ContactCreateView(LoginRequiredMixin, CreateView):
     model = ContactSubmission
     fields = ['name', 'email', 'subject', 'message']
-    success_url = 'home'
+    success_url = 'success'
     template_name = 'contact.html'
 
     @login_required
@@ -165,7 +160,7 @@ class ContactCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.warning(self.request, 'Unable to send the enquiry') 
+        messages.warning(self.request, 'Unable to send the enquiry')
         return super().form_invalid(form)
 
     def get_success_url(self):
@@ -200,5 +195,5 @@ def report(request):
     return render(request, 'itreporting/report.html', context)
 
 
-def success_view(request):
+def success(request):
     return render(request, 'success.html')

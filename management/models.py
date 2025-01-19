@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import Count, Model
 from django.contrib.auth.models import User
 from datetime import datetime, date
 from django.utils import timezone
@@ -30,16 +29,16 @@ class Module(models.Model):
     def __str__(self):
         return f'{self.name}'
     
-#    def get_absolute_url(self):
-#        return reverse('management/module_details', kwargs={'pk': self.pk})
+    def get_absolute_url(self):
+        return reverse('management/module_details', kwargs={'pk': self.pk})
 
 
 class Course(models.Model):
-    name = models.CharField(
-        primary_key=True, max_length=10)
+    course_name = models.CharField(
+        primary_key=True, max_length=30, default='')
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.course_name}'
 
 
 class ModuleCourse(models.Model):

@@ -1,10 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
-# from . import views as student_views
 from django.contrib.auth.models import User
 from .views import ModuleDetailView, welcome, ModuleListView
 from .views import RegistrationFormView, success_view, CreateModuleView
 from .views import CreateCourseView, CourseListView, module_form
+from management import views as student_views
 
 
 urlpatterns = [
@@ -24,4 +24,8 @@ urlpatterns = [
     path('management/course_list', CourseListView.as_view(
         template_name='course_list.html'), name='course_list'),
     path('mangemnt/module_form', module_form, name='module_form'),
+    path('mangemnt/module_course_formset', student_views.module_course_formset,
+         name='module_course_form'),
+    path('management/course_formset', student_views.course_formset_view,
+         name='course_form'),
 ]
