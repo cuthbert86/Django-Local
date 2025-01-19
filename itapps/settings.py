@@ -155,3 +155,5 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'bainescuthbert@gmail.com'
 EMAIL_HOST_PASSWORD = "vxdy mpes bucl cyul"
+X_FRAME_OPTIONS = 'ALLOWALL'
+
