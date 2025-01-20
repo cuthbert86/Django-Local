@@ -10,6 +10,7 @@ from rest_framework import serializers
 from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 
 
 Category = [("compulsary", "compulsary"),
@@ -29,7 +30,7 @@ class Module(models.Model):
     avalaible = models.CharField(choices=available, max_length=10)
 
     def __str__(self):
-        return f'{self.name} + {self.coursename}'
+        return f'{self.name} + {self.Course_Code}'
 
     def get_absolute_url(self):
         return reverse('management/module_details', kwargs={'pk': self.pk})
@@ -55,12 +56,11 @@ class ModuleCourse(models.Model):
         return f'{self.name} + {self.module}'
 
 
-class Registration(models.Model):
+class Registration(models.Model):   
     user = models.ForeignKey(to=User, default=User, on_delete=models.CASCADE)
     Module = models.ForeignKey(to=Module, on_delete=models.CASCADE)
-    registration_date = models.DateField(default=date.now, null=True)
+    registration_date = models.DateTimeField(default=datetime.now, null=True)
 
-    
     def __str__(self):
         return f'{self.user} - {self.Module}'
     

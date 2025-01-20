@@ -71,6 +71,7 @@ class IssueListView(ListView):
     issue = 'issues'
     paginate_by = 5  # Optional pagination
 
+    @login_required
     def get_issue(self):
         return Issue.objects.all()
 

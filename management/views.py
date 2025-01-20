@@ -100,7 +100,7 @@ def success_view(request):
 class CreateModuleView(CreateView):
     model = Module
     fields = ['Name', 'Course_Code', 'credits', 'Category', 'Description',
-              'Coursename', 'available']
+              'coursename', 'available']
     success_url = 'management/create_module'
 
     @login_required
@@ -130,11 +130,11 @@ class AddCourseView(CreateView):
         if request.method == 'POST':
             form = CourseForm(request.POST or None)
         if form.is_valid():
-            form.save()  # Save the module to the database
-            return redirect(request, 'add_course')
+            form.save()
+            return redirect(request, 'management/add_course')
         else:
             form = CourseForm()
-        return render(request, 'add_course.html', {'form': form})
+        return render(request, 'management/add_course.html', {'form': form})
 
 
 class RegistrationFormView(LoginRequiredMixin, FormView):

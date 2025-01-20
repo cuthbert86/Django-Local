@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
             name='ModuleCourse',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('course_name', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='management.course')),
+
                 ('module', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='management.module')),
             ],
         ),
