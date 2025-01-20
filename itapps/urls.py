@@ -17,7 +17,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
 from users import views as user_views
-from itreporting import views, urls
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -25,6 +24,10 @@ from management import views as student_views
 from itreporting.views import send_mail
 from newsapp import views as news_views
 from users.forms import NewPasswordChangeForm
+from management.urls import urlpatterns as urls
+from management.forms import forms
+from itreporting import views
+
 
 urlpatterns = [
     path('admin', admin.site.urls),

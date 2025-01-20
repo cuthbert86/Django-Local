@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'management',
     'newsapp',
+    'Live_Data_Dashboard',
 ]
 
 MIDDLEWARE = [

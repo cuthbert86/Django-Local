@@ -6,7 +6,6 @@ from .views import ModuleDetailView, welcome, ModuleListView
 from .views import RegistrationFormView, success_view
 from .views import AddCourseView, CourseListView, AddModuleView
 
-
 urlpatterns = [
     path('management/welcome', welcome, name='welcome'),
     path('management/module_list', ModuleListView.as_view(
@@ -20,7 +19,7 @@ urlpatterns = [
 #    path('management/create_module', CreateModuleView.as_view(
 #         template_name='create_module.html'), name='create_module'),
     path('management/add_course', AddCourseView.as_view(
-        template_name='add_course.html'), name='add_course'),
+        template_name='_course.html'), name='add_course'),
     path('management/course_list', CourseListView.as_view(
         template_name='course_list.html'), name='course_list'),
     path('mangemnt/add_module', AddModuleView.as_view(

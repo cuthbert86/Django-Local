@@ -63,7 +63,7 @@ class Registration(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.Module}'
-    
+
     def get_absolute_url(self):
         return reverse(
             'management:registration_detail', kwargs={'pk': self.pk})

@@ -165,7 +165,7 @@ class ContactCreateView(LoginRequiredMixin, CreateView):
         return super().form_invalid(form)
 
     def get_success_url(self):
-        return self.request.path
+        return (self.request.path, 'itreporting/success.html')
 
     @login_required
     def send_mail(request):

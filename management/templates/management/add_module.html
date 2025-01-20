@@ -2,18 +2,41 @@
 {% block content %}
 <body>
     <div class="container">
-        <h1>Add Course</h1>
-        <form method="post" action="{% url 'add_course' %}">
+        <h1>Add Module</h1>
+        <form method="post" action="{% url 'add_module' %}">
             {% csrf_token %}
             <div class="form-group">
-                <label for="name">Course Name</label>
+                <label for="name">Module Name:</label>
                 {{ form.name }}
             </div>
             <div class="form-group">
-                <label for="Module">Module</label>
-                {{ form.module }}
+                <label for="Course_Code">Course Code</label>
+                {{ form.course_code }}
             </div>
             <div class="form-group">
+                <label for="credits">credits</label>
+                {{ form.credits }}
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                {{ form.category }}
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                {{ form.category }}
+            </div>
+            <div class="form-group">
+                <label for="Description">Description</label>
+                {{ form.description }}
+            </div>
+            <div class="form-group">
+                <label for="coursename">DCourse Name</label>
+                {{ form.coursename }}
+            </div>
+            <div class="form-group">
+                <label for="available">Avalable</label>
+                {{ form.available }}
+            </div>
                 <button type="submit">Send</button>
             </div>
         </form>

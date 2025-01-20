@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import DeleteView
 from .models import Module, Registration, Course
 from django.http import HttpResponse
-from .forms import RegistrationForm, ModuleForm, CourseForm
+from .forms import RegistrationForm, ModuleForm, CourseForm, ModuleCourseForm
 from django.contrib.auth.models import User
 from itapps import settings
 from django.urls import reverse_lazy
@@ -111,7 +111,7 @@ class CreateModuleView(CreateView):
             form.save()
 
         context['module_form'] = form
-        return render(request, "module_form.html", context)
+        return render(request, "management/module_form.html", context)
 
     @login_required
     def form_valid(self, form):
@@ -160,8 +160,26 @@ class AddModuleView(CreateView):
             form = ModuleForm(request.POST or None)
         if form.is_valid():
             form.save()  # Save the module to the database
-            return redirect(request, 'add_module')  # Redirect to the module list page or any other page
+            return redirect(request, 'management/add_module')  # Redirect to the module list page or any other page
         else:
             form = ModuleForm()
 
-        return render(request, 'add_module.html', {'form': form})
+        return render(request, 'management/add_module.html', {'form': form})
+
+
+class AddModuleCourseView(CreateView):
+    model = ModuleCourse
+    fields = ['Name', 'Module']
+    success_url = 'management/add_modulecourse'
+
+    @login_required
+    def add_module(self, form, request):
+        if request.method == 'POST':
+            form = ModuleCourseForm(request.POST or None)
+        if form.is_valid():
+            form.save()  # Save the module to the database
+            return redirect(request, 'management/add_modulecourse')  # Redirect to the module list page or any other page
+        else:
+            form = ModuleCourseForm()
+
+        return render(request, 'management/add_modulecourse.html', {'form': form})
