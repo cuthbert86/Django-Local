@@ -18,6 +18,6 @@ def index(request):
         news.append(f['title'])
         desc.append(f['description'])
         img.append(f['urlToImage'])
-    mylist = zip(news, desc, img)
+        mylist = zip(news, desc, img)
 
     return render(request, 'newsapp/index.html', context={"mylist": mylist})

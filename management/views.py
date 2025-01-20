@@ -13,12 +13,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import DeleteView
 from .models import Module, Registration, Course
 from django.http import HttpResponse
-from .forms import RegistrationForm, ModuleForm, CourseForm, ModuleCourseForm
+from .forms import RegistrationForm, ModuleForm, CourseForm
 from django.contrib.auth.models import User
 from itapps import settings
 from django.urls import reverse_lazy
 from .models import Module, Registration, Course, ModuleCourse
-from django.forms import formset_factory
 
 
 @login_required
@@ -72,13 +71,13 @@ class ModuleDetailView(DetailView):
         if request.method != "POST":
             return HttpResponse("<h2>Method Not Allowed</h2>")
         else:
-            context.name = request.POST.get('Name')
-            context.Course_Code = request.POST.get('Course_Code')
-            context.credits = request.POST.get('credits')
-            context.Category = request.POST.get('Category')
-            context.Description = request.POST.get('Description')
+            Module.name = request.POST.get('Name')
+            Module.Course_Code = request.POST.get('Course Code')
+            Module.credits = request.POST.get('credits')
+            Module.Category = request.POST.get('Category')
+            Module.Description = request.POST.get('Description')
 #            Module.Course = request.POST.get('Course')
-            context.availabile = request.POST.get('availability')
+            Module.availabile = request.POST.get('availability')
         return render(request, "management/module_details", context)
 
 
@@ -89,9 +88,9 @@ class RegistrationListView(ListView):
 
     @login_required
     def get_queryset(self):
-        user = get_object_or_404(to=User, username=self.kwargs.get('username'))
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
         return Registration.objects.filter(
-            author=user).order_by('date_submitted')
+            author=user).order_by('-date_submitted')
 
 
 def success_view(request):
@@ -101,8 +100,8 @@ def success_view(request):
 class CreateModuleView(CreateView):
     model = Module
     fields = ['Name', 'Course_Code', 'credits', 'Category', 'Description',
-              'Course', 'available']
-    success_url = 'management/success'
+              'Coursename', 'available']
+    success_url = 'management/create_module'
 
     @login_required
     def module_form(request):
@@ -110,7 +109,8 @@ class CreateModuleView(CreateView):
         form = ModuleForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             form.save()
-            context['module_form'] = form
+
+        context['module_form'] = form
         return render(request, "module_form.html", context)
 
     @login_required
@@ -119,26 +119,22 @@ class CreateModuleView(CreateView):
         return super().form_valid(form)
 
 
-class CreateCourseView(LoginRequiredMixin, CreateView):
+class AddCourseView(CreateView):
     model = Course
-    fields = ['course_name']
-    template_name = 'management/create_course.html'
-    success_url = 'management/course_list'
+    fields = ['name', 'module']
+    template_name = 'management/add_course.html'
+    success_url = 'management/add_course'
 
     @login_required
-    def course_form(request):
-        context = {}
-        form = CourseForm(request.POST or None, request.FILES or None)
+    def add_course(self, form, request):
+        if request.method == 'POST':
+            form = CourseForm(request.POST or None)
         if form.is_valid():
-            form.save()
-
-            context['course_form'] = form
-        return render(request, 'course_form.html', context)
-
-    @login_required
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
+            form.save()  # Save the module to the database
+            return redirect(request, 'add_course')
+        else:
+            form = CourseForm()
+        return render(request, 'add_course.html', {'form': form})
 
 
 class RegistrationFormView(LoginRequiredMixin, FormView):
@@ -147,66 +143,25 @@ class RegistrationFormView(LoginRequiredMixin, FormView):
     success_url = 'management/success'
 
     @login_required
-    def registration_formset(request):
-        context = {}
-        registrationformset = formset_factory(RegistrationForm, extra=4)
-        if registrationformset.is_valid():
-            registrationformset.save()
-            context['registration_formset'] = registrationformset
-        return render(request, 'generic_formset.html', context)
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
-@login_required
-def module_form(request):
-    context = {}
-    form = ModuleForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        form.save()
-        context['module_form'] = form
-    return render(request, "module_form.html", context)
+class AddModuleView(CreateView):
+    model = Module
+    fields = ['Name', 'Course_Code', 'credits', 'Category', 'Description',
+              'Course', 'available']
+    success_url = 'management/add_module'
 
+    @login_required
+    def add_module(self, form, request):
+        if request.method == 'POST':
+            form = ModuleForm(request.POST or None)
+        if form.is_valid():
+            form.save()  # Save the module to the database
+            return redirect(request, 'add_module')  # Redirect to the module list page or any other page
+        else:
+            form = ModuleForm()
 
-@login_required
-def course_form(request):
-    context = {}
-    form = CourseForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        form.save()
-
-        context['course_form'] = form
-    return render(request, "course_form.html", context)
-
-
-@login_required
-def module_course_formset(request):
-    context = {}
-    courseformset = formset_factory(ModuleCourseForm, extra=5)
-    if courseformset.is_valid():
-        courseformset.save()
-        context['module_course_formset'] = courseformset
-    return render(request, 'module_course_form.html', context)
-
-
-@login_required
-def module_course_list(request):
-    modulecourses = ModuleCourse.objects.all()
-    return render(request, 'module_course_list.html',
-                  {'module_course': modulecourses})
-
-
-@login_required
-def course_formset_view(request):
-    context = {}
-    courseFormSet = formset_factory(CourseForm, extra=5)
-    formset = courseFormSet(request.POST or None)
-    context['courseFormSet'] = formset
-    return render(request, "generic_formset.html", context)
-
-
-@login_required
-def module_form_view(request):
-    context = {}
-    ModuleFormSet = formset_factory(ModuleForm, extra=5) 
-    formset = ModuleFormSet(request.POST or None)
-    context['module_formset'] = formset
-    return render(request, "generic_formset.html", context)
+        return render(request, 'add_module.html', {'form': form})

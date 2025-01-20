@@ -25,7 +25,6 @@ class ContactForm(forms.ModelForm):
                   ['bainescuthbert@gmail.com'])
 
 
-
 class IssueForm(forms.ModelForm):
 
     class Meta:

@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models import Model
-from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse, reverse_lazy
 from datetime import datetime
@@ -13,7 +12,7 @@ Type = [('Hardware', 'Hardware'),
 
 class Issue(models.Model):
     type = models.CharField(
-        max_length=10, choices=Type)
+        max_length=20, choices=Type)
     room = models.CharField(max_length=10)
     urgent = models.BooleanField(default=False)
     details = models.TextField(max_length=200)
@@ -32,7 +31,7 @@ class Issue(models.Model):
 class ContactSubmission(models.Model):
     todaysDate = models.DateField(auto_now_add=True)
     name = models.CharField(max_length=20, default='N/A')
-    email = models.EmailField(max_length=20, default='')
+    email = models.EmailField(max_length=40, default='')
     subject = models.CharField(max_length=50, default='')
     message = models.TextField(max_length=300, default='')
 

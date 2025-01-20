@@ -13,7 +13,7 @@ class RegistrationForm(forms.ModelForm):
     model = Registration
     module = forms.ChoiceField(
         choices=[], label='Please select a module from the list')
-
+    
     @login_required
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
@@ -28,7 +28,7 @@ class RegistrationForm(forms.ModelForm):
 
 class ModuleForm(forms.ModelForm):
     model = Module
-    fields = 'name', 'Course_Code', 'credits', 'category', 'description', 'available', 'course'
+    fields = 'name', 'Course_Code', 'credits', 'course', 'category', 'description', 'available'
     course = forms.ChoiceField(
         choices=[], label='Please select a course from the list')
 
@@ -36,7 +36,7 @@ class ModuleForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ModuleForm, self).__init__(*args, **kwargs)
         self.fields['course'].choices = [
-            (Course.course_name) for Course in Course.objects.all()]
+            (Course.name) for Course in Course.objects.all()]
 
     @login_required
     def form_valid(self, form):
@@ -46,31 +46,39 @@ class ModuleForm(forms.ModelForm):
 
 class CourseForm(forms.ModelForm):
     model = Course
-    fields = 'course_name'
+    fields = 'name', 'module'
+    module = forms.ChoiceField(
+        choices=[], label='Please select a module from the list')
 
     @login_required
-    def form_valid(self, form):
+    def __init__(self, *args, **kwargs):
+        super(CourseForm, self).__init__(*args, **kwargs)
+        self.fields['module'].choices = [
+            (Module.name) for Module in Module.objects.all()]
+
+    @login_required
+    def form_valid(self, form, request):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
 
-class ModuleCourseForm(forms.ModelForm):
+class ModuleCourseform(forms.ModelForm):
     model = ModuleCourse
     module = forms.ChoiceField(
         choices=[], label='Please select a module from the list')
-
+    
     def __init__(self, *args, **kwargs):
-        super(ModuleCourseForm, self).__init__(*args, **kwargs)
+        super(ModuleCourseform, self).__init__(*args, **kwargs)
         self.fields['module'].choices = [
-            (Module.name) for Module in Module.objects.all()]
+            (Module.name) for Module in Module.objects.all()]    
 
-    course_name = forms.ChoiceField(
+    course = forms.ChoiceField(
         choices=[], label='Please select a course from the list')
 
     def __init__(self, *args, **kwargs):
-        super(ModuleCourseForm, self).__init__(*args, **kwargs)
-        self.fields['course_name'].choices = [
-            (Course.course_name) for Course in Course.objects.all()]
+        super(ModuleCourseform, self).__init__(*args, **kwargs)
+        self.fields['course'].choices = [
+            (Course.name) for Course in Course.objects.all()]
         
     @login_required
     def form_valid(self, form):
